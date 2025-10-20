@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7785a57yw6si"]
+
+[ext_resource type="Texture2D" uid="uid://b1kv4iqleteug" path="res://sprites/vilão estático.png" id="1_0v7uh"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8jwm6"]
+radius = 172.9393
+
+[node name="vilao" type="CharacterBody2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_0v7uh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(6, 7)
+shape = SubResource("CircleShape2D_8jwm6")

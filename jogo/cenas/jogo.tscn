@@ -1,0 +1,53 @@
+[gd_scene load_steps=4 format=3 uid="uid://44wlc1se2m2m"]
+
+[ext_resource type="Texture2D" uid="uid://b4fc8b4eihrul" path="res://sprites/Cidade pegando fogo.png" id="1_32vai"]
+[ext_resource type="PackedScene" uid="uid://c7785a57yw6si" path="res://cenas/vilao.tscn" id="2_1frua"]
+[ext_resource type="PackedScene" uid="uid://nedc2tjm6rdp" path="res://cenas/livro.tscn" id="3_1frua"]
+
+[node name="jogo" type="Node2D"]
+
+[node name="background" type="Sprite2D" parent="."]
+scale = Vector2(0.768, 0.648)
+texture = ExtResource("1_32vai")
+centered = false
+
+[node name="mensagem" type="Label" parent="."]
+visible = false
+offset_left = 405.0
+offset_top = 33.0
+offset_right = 726.0
+offset_bottom = 56.0
+text = "Resolva o Enigma para Derrotar o inimigo"
+horizontal_alignment = 1
+
+[node name="vilao" parent="." instance=ExtResource("2_1frua")]
+position = Vector2(922, 338)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="vilao"]
+
+[node name="ProgressBar" type="ProgressBar" parent="vilao/CanvasLayer"]
+offset_left = 773.0
+offset_top = 533.0
+offset_right = 1080.0
+offset_bottom = 560.0
+value = 100.0
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 46.0
+offset_top = 143.0
+offset_right = 86.0
+offset_bottom = 183.0
+
+[node name="TextEdit" type="TextEdit" parent="Control"]
+layout_mode = 0
+offset_right = 546.0
+offset_bottom = 336.0
+placeholder_text = "Code aqui..."
+
+[node name="botao_livro" parent="." instance=ExtResource("3_1frua")]
+offset_left = 586.00006
+offset_top = 428.0
+offset_right = 586.00006
+offset_bottom = 428.0
