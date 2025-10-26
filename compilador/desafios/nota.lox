@@ -1,0 +1,5 @@
+//substitua "?" por um valor que resulte no output "B"
+var nota = ?;
+if (nota >= 90) "A"
+else if (nota >= 80) "B"
+else "C"
