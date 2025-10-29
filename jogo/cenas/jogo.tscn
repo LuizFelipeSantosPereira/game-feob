@@ -46,6 +46,13 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
+[node name="BookBotton" parent="." instance=ExtResource("3_1frua")]
+position = Vector2(726, 318)
+scale = Vector2(1.22177, 1.41781)
+
+[node name="vilao" parent="." instance=ExtResource("2_1frua")]
+position = Vector2(931, 319)
+
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
@@ -71,10 +78,3 @@ scale = Vector2(0.400951, 0.28845)
 theme_override_styles/focus = SubResource("StyleBoxEmpty_c77ad")
 icon = ExtResource("3_dtkcs")
 flat = true
-
-[node name="BookBotton" parent="." instance=ExtResource("3_1frua")]
-position = Vector2(726, 318)
-scale = Vector2(1.22177, 1.41781)
-
-[node name="vilao" parent="." instance=ExtResource("2_1frua")]
-position = Vector2(931, 319)
