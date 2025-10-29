@@ -10,10 +10,18 @@ scale = Vector2(0.940945, 1.09576)
 script = ExtResource("1_8bo0g")
 
 [node name="guide_panel" type="Panel" parent="."]
-offset_left = -498.435
-offset_top = -341.314
-offset_right = -21.4352
-offset_bottom = 84.6859
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -238.5
+offset_top = -213.0
+offset_right = 238.5
+offset_bottom = 213.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.02644, 0.921892)
 
 [node name="guide_text" type="Label" parent="guide_panel"]
 layout_mode = 0
@@ -24,11 +32,16 @@ text = "1 - Teste
 3 - Linha"
 
 [node name="book_button" type="Button" parent="."]
-offset_left = -47.0
-offset_top = -46.0
-offset_right = 161.0
-offset_bottom = 212.0
-scale = Vector2(0.686127, 0.559772)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 250.812
+offset_top = -260.093
+offset_right = 458.812
+offset_bottom = -2.09344
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.650847, 0.539947)
 theme_override_styles/focus = SubResource("StyleBoxEmpty_8bo0g")
 icon = ExtResource("1_lqy5k")
 flat = true

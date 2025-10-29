@@ -1,10 +1,18 @@
-[gd_scene load_steps=9 format=3 uid="uid://44wlc1se2m2m"]
+[gd_scene load_steps=13 format=3 uid="uid://44wlc1se2m2m"]
 
 [ext_resource type="Texture2D" uid="uid://b4fc8b4eihrul" path="res://sprites/Cidade pegando fogo.png" id="1_32vai"]
 [ext_resource type="Script" uid="uid://dmb38v4s6nx7u" path="res://scripts/jogo.gd" id="1_dmxwg"]
 [ext_resource type="PackedScene" uid="uid://c7785a57yw6si" path="res://cenas/vilao.tscn" id="2_1frua"]
 [ext_resource type="PackedScene" uid="uid://nedc2tjm6rdp" path="res://cenas/livro.tscn" id="3_1frua"]
 [ext_resource type="Texture2D" uid="uid://q4567rukh0je" path="res://sprites/SETA P DIREITA.png" id="3_dtkcs"]
+[ext_resource type="FontFile" uid="uid://w0gklafmhnwd" path="res://Fontes/VT323-Regular.ttf" id="3_srya6"]
+[ext_resource type="Texture2D" uid="uid://bnnivadwdccw7" path="res://sprites/ChatGPTImage.png" id="4_srya6"]
+
+[sub_resource type="FontVariation" id="FontVariation_dmxwg"]
+base_font = ExtResource("3_srya6")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_v6mw0"]
+texture = ExtResource("4_srya6")
 
 [sub_resource type="GDScript" id="GDScript_srya6"]
 
@@ -23,13 +31,20 @@ texture = ExtResource("1_32vai")
 centered = false
 
 [node name="mensagem" type="Label" parent="."]
-visible = false
-offset_left = 405.0
+offset_left = 35.0
 offset_top = 33.0
-offset_right = 726.0
-offset_bottom = 56.0
-text = "Resolva o Enigma para Derrotar o inimigo"
+offset_right = 925.0
+offset_bottom = 95.0
+theme_override_colors/font_color = Color(1, 0.196078, 0.196078, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = SubResource("FontVariation_dmxwg")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxTexture_v6mw0")
+text = "afdsfdsfdsfsdfsdf"
 horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -58,9 +73,8 @@ icon = ExtResource("3_dtkcs")
 flat = true
 
 [node name="BookBotton" parent="." instance=ExtResource("3_1frua")]
-visible = false
-position = Vector2(675, 506)
-scale = Vector2(1.33037, 1.44456)
+position = Vector2(726, 318)
+scale = Vector2(1.22177, 1.41781)
 
 [node name="vilao" parent="." instance=ExtResource("2_1frua")]
 position = Vector2(931, 319)
