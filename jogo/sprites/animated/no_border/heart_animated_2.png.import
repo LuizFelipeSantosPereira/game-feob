@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bn4oxwku0thw3"
-path="res://.godot/imported/CADERNO.png-e91d1130392569468222693d29a83b44.ctex"
+uid="uid://doc525dqp7p1r"
+path="res://.godot/imported/heart_animated_2.png-580d51585e3547d6472339d00ee76c7e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/CADERNO.png"
-dest_files=["res://.godot/imported/CADERNO.png-e91d1130392569468222693d29a83b44.ctex"]
+source_file="res://sprites/animated/no_border/heart_animated_2.png"
+dest_files=["res://.godot/imported/heart_animated_2.png-580d51585e3547d6472339d00ee76c7e.ctex"]
 
 [params]
 
