@@ -24,12 +24,21 @@ grow_vertical = 2
 scale = Vector2(1.02644, 0.921892)
 
 [node name="guide_text" type="Label" parent="guide_panel"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "1 - Teste
 2 - Code
 3 - Linha"
+autowrap_mode = 3
+vertical_alignment = 1
 
 [node name="book_button" type="Button" parent="."]
 anchors_preset = 15
