@@ -3,7 +3,8 @@ extends RefCounted
 ## Gerenciador de desafios
 class_name ChallengeManager
 
-const CHALLENGES_PATH = "res://../compilador/desafios/"
+
+const CHALLENGES_PATH = "res://compilador/desafios/"
 var challenges: Array[Dictionary] = []
 var current_challenge_index: int = 0
 
@@ -170,4 +171,3 @@ func validate_solution(code: String, expected_output: String) -> Dictionary:
 			"expected": expected_output,
 			"got": output
 		}
-
