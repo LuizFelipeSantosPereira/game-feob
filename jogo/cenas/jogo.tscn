@@ -11,8 +11,9 @@
 [sub_resource type="FontVariation" id="FontVariation_dmxwg"]
 base_font = ExtResource("3_srya6")
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_v6mw0"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_srya6"]
 texture = ExtResource("4_srya6")
+region_rect = Rect2(103.78241, 181.10854, 1318.1401, 661.9232)
 
 [sub_resource type="GDScript" id="GDScript_srya6"]
 
@@ -40,7 +41,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 theme_override_fonts/font = SubResource("FontVariation_dmxwg")
 theme_override_font_sizes/font_size = 50
-theme_override_styles/normal = SubResource("StyleBoxTexture_v6mw0")
+theme_override_styles/normal = SubResource("StyleBoxTexture_srya6")
 text = "afdsfdsfdsfsdfsdf"
 horizontal_alignment = 1
 vertical_alignment = 1
