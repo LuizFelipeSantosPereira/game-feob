@@ -1,0 +1,107 @@
+[gd_scene load_steps=11 format=3 uid="uid://c7785a57yw6si"]
+
+[ext_resource type="Texture2D" uid="uid://us4yg8r3slje" path="res://sprites/SPRITEt.png" id="1_0v7uh"]
+[ext_resource type="Texture2D" uid="uid://bwt5vmtd0e37c" path="res://sprites/borda-life.png" id="3_ic4uk"]
+
+[sub_resource type="GDScript" id="GDScript_8jwm6"]
+script/source = "extends CharacterBody2D
+
+@onready var vida_bar = $TextureProgressBar
+@onready var sprite = $vilao_animated
+
+var vida_max = 100
+var vida_atual = 100
+
+func _ready():
+	vida_bar.max_value = vida_max
+	vida_bar.value = vida_atual
+	print(\"Vilão iniciado com vida =\", vida_atual)
+
+func levar_dano(valor):
+	vida_atual -= valor
+	if vida_atual < 0:
+		vida_atual = 0
+
+	vida_bar.value = vida_atual
+	print(\"Vilão levou\", valor, \"de dano. Vida atual =\", vida_atual)
+	piscar_dano()
+
+	if vida_atual <= 0:
+		morrer()
+
+func piscar_dano():
+	sprite.modulate = Color(1, 0.3, 0.3)
+	await get_tree().create_timer(0.2).timeout
+	sprite.modulate = Color(1, 1, 1)
+
+func morrer():
+	print(\"💀 Vilão derrotado!\")
+	queue_free()
+"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8jwm6"]
+atlas = ExtResource("1_0v7uh")
+region = Rect2(0, 0, 325, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ic4uk"]
+atlas = ExtResource("1_0v7uh")
+region = Rect2(325, 0, 325, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r6pyq"]
+atlas = ExtResource("1_0v7uh")
+region = Rect2(650, 0, 325, 282)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_10351"]
+resource_local_to_scene = true
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8jwm6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ic4uk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6pyq")
+}],
+"loop": true,
+"name": &"parado",
+"speed": 3.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8jwm6"]
+radius = 172.939
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8jwm6"]
+bg_color = Color(0.972549, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ic4uk"]
+bg_color = Color(0, 0.768935, 0, 1)
+
+[node name="vilao" type="CharacterBody2D"]
+script = SubResource("GDScript_8jwm6")
+
+[node name="vilao_animated" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_10351")
+animation = &"parado"
+frame_progress = 0.562824
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(6, 7)
+shape = SubResource("CircleShape2D_8jwm6")
+
+[node name="TextureProgressBar" type="ProgressBar" parent="."]
+offset_left = -169.0
+offset_top = 165.0
+offset_right = 169.0
+offset_bottom = 205.0
+theme_override_styles/background = SubResource("StyleBoxFlat_8jwm6")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ic4uk")
+value = 50.0
+show_percentage = false
+
+[node name="Borda-life" type="Sprite2D" parent="TextureProgressBar"]
+position = Vector2(170, 20)
+scale = Vector2(0.969585, 0.879662)
+texture = ExtResource("3_ic4uk")

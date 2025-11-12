@@ -1,0 +1,14 @@
+// Invoque corretamente o método definido na classe pessoa substituindo "?"
+
+class Pessoa {
+  init(name) {
+    this.name = name;
+  }
+
+  ola() {
+    print "Olá, eu sou o " + this.? + "."; //Olá, eu sou o Hacker.
+  }
+}
+
+var p = Pessoa("Hacker");
+p.?();

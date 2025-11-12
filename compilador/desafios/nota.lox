@@ -1,0 +1,9 @@
+//substitua "?" por um valor que resulte no output "B"
+var nota = ?;
+if (nota >= 90) {
+  print "A";
+} else if (nota >= 80) {
+  print "B"; //B
+} else {
+  print "C";
+}

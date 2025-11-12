@@ -1,0 +1,50 @@
+[gd_scene load_steps=8 format=3 uid="uid://c7785a57yw6si"]
+
+[ext_resource type="Texture2D" uid="uid://us4yg8r3slje" path="res://sprites/SPRITEt.png" id="1_0v7uh"]
+[ext_resource type="Script" uid="uid://y0dk2huhow3" path="res://scripts/vilao.gd" id="1_8jwm6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8jwm6"]
+atlas = ExtResource("1_0v7uh")
+region = Rect2(0, 0, 325, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ic4uk"]
+atlas = ExtResource("1_0v7uh")
+region = Rect2(325, 0, 325, 282)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r6pyq"]
+atlas = ExtResource("1_0v7uh")
+region = Rect2(650, 0, 325, 282)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_10351"]
+resource_local_to_scene = true
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8jwm6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ic4uk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6pyq")
+}],
+"loop": true,
+"name": &"parado",
+"speed": 3.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8jwm6"]
+radius = 172.939
+
+[node name="vilao" type="CharacterBody2D"]
+script = ExtResource("1_8jwm6")
+
+[node name="vilao_animated" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_10351")
+animation = &"parado"
+frame_progress = 0.107029
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(6, 7)
+shape = SubResource("CircleShape2D_8jwm6")
