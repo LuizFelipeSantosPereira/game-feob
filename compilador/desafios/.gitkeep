@@ -1,0 +1,57 @@
+# Documentação Técnica
+
+Este projeto consiste em um jogo desenvolvido com o **Godot Engine**, que possui como principal funcionalidade a execução de scripts escritos na linguagem **Lox**.
+A integração é feita por meio de um **interpretador Lox implementado em Java**, que é carregado e executado junto ao jogo.
+
+---
+
+# Estrutura Geral do Projeto
+
+```
+/compilador
+/interface
+/jogo
+README.md
+```
+
+* **jogo/**: arquivos do jogo Godot.
+* **interface/**: rquivos para a construção visual do jogo.
+* **compilador/**: implementação Java do interpretador Lox.
+* **README.md**: documentação técnica.
+
+---
+
+# Funcionalidades
+
+## Execução de scripts Lox dentro do jogo
+
+Scripts Lox podem ser carregados dinamicamente pelo Godot para controlar:
+
+* comportamento de NPCs,
+* eventos do jogo,
+* lógica de puzzles,
+* interações contextuais.
+
+## Integração Godot ↔ Java
+
+* O jogo faz chamadas externas para a JVM.
+* O interpretador Lox recebe o script solicitado e devolve o resultado para o Godot.
+* Comunicação feita via **Process**, **pipelines**, arquivos temporários ou WebSocket (dependendo da arquitetura escolhida).
+
+---
+
+# Configuração da JVM no Ambiente do Desenvolvedor
+
+Para garantir a execução adequada do interpretador Lox em Java, o desenvolvedor deve preparar corretamente o ambiente Java na máquina.
+
+Siga o processo indicado pela Oracle: https://dev.java/download/
+
+---
+
+# 🧩 Execução do Interpretador LOX
+
+Após a JVM estar configurada corretamente, o interpretador pode ser executado manualmente por testes:
+
+```bash
+java Lox.java script.lox
+```
