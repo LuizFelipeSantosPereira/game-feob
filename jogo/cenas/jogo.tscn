@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://44wlc1se2m2m"]
+[gd_scene load_steps=14 format=3 uid="uid://44wlc1se2m2m"]
 
 [ext_resource type="Texture2D" uid="uid://b4fc8b4eihrul" path="res://sprites/Cidade pegando fogo.png" id="1_32vai"]
 [ext_resource type="Script" uid="uid://dmb38v4s6nx7u" path="res://scripts/jogo.gd" id="1_dmxwg"]
@@ -6,75 +6,154 @@
 [ext_resource type="PackedScene" uid="uid://nedc2tjm6rdp" path="res://cenas/livro.tscn" id="3_1frua"]
 [ext_resource type="Texture2D" uid="uid://q4567rukh0je" path="res://sprites/SETA P DIREITA.png" id="3_dtkcs"]
 [ext_resource type="FontFile" uid="uid://w0gklafmhnwd" path="res://Fontes/VT323-Regular.ttf" id="3_srya6"]
-[ext_resource type="Texture2D" uid="uid://bnnivadwdccw7" path="res://sprites/ChatGPTImage.png" id="4_srya6"]
+[ext_resource type="PackedScene" uid="uid://y0xpgeupulcy" path="res://cenas/game_over_screen.tscn" id="5_gameover"]
 
 [sub_resource type="FontVariation" id="FontVariation_dmxwg"]
 base_font = ExtResource("3_srya6")
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_v6mw0"]
-texture = ExtResource("4_srya6")
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mensagem"]
+bg_color = Color(0.2, 0.1, 0.1, 0.85)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.3, 0.3, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+expand_margin_left = 10.0
+expand_margin_top = 10.0
+expand_margin_right = 10.0
+expand_margin_bottom = 10.0
 
-[sub_resource type="GDScript" id="GDScript_srya6"]
-
-[sub_resource type="GDScript" id="GDScript_v6mw0"]
-script/source = "extends TextEdit
-"
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_textedit"]
+bg_color = Color(0.1, 0.1, 0.15, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.6, 0.9, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c77ad"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_player_bg"]
+bg_color = Color(0.1, 0.1, 0.1, 0.8)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_player_fill"]
+bg_color = Color(0.2, 0.8, 0.2, 0.9)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [node name="jogo" type="Node2D"]
 script = ExtResource("1_dmxwg")
 
-[node name="background" type="Sprite2D" parent="."]
-scale = Vector2(0.768, 0.648)
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="background" type="Sprite2D" parent="CanvasLayer"]
+position = Vector2(-2, 1.90735e-06)
+scale = Vector2(1.30653, 1.25646)
 texture = ExtResource("1_32vai")
 centered = false
 
-[node name="mensagem" type="Label" parent="."]
-offset_left = 35.0
-offset_top = 33.0
-offset_right = 925.0
-offset_bottom = 95.0
-theme_override_colors/font_color = Color(1, 0.196078, 0.196078, 1)
+[node name="mensagem" type="Label" parent="CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -940.0
+offset_top = 21.0
+offset_right = -50.0
+offset_bottom = 108.0
+grow_horizontal = 2
+scale = Vector2(1.98354, 1.92813)
+theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
+theme_override_constants/outline_size = 5
 theme_override_fonts/font = SubResource("FontVariation_dmxwg")
-theme_override_font_sizes/font_size = 50
-theme_override_styles/normal = SubResource("StyleBoxTexture_v6mw0")
-text = "afdsfdsfdsfsdfsdf"
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxFlat_mensagem")
+text = "🧠 Complete o código para atacar o Otto!"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="BookBotton" parent="." instance=ExtResource("3_1frua")]
-position = Vector2(726, 318)
-scale = Vector2(1.22177, 1.41781)
+[node name="BookBotton" parent="CanvasLayer" instance=ExtResource("3_1frua")]
+position = Vector2(571, 248)
+scale = Vector2(1.54088, 1.57948)
 
-[node name="vilao" parent="." instance=ExtResource("2_1frua")]
-position = Vector2(931, 319)
+[node name="vilao" parent="CanvasLayer" instance=ExtResource("2_1frua")]
+position = Vector2(1634, 662)
+scale = Vector2(1.55362, 1.70206)
 
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 46.0
-offset_top = 143.0
-offset_right = 86.0
-offset_bottom = 183.0
-script = SubResource("GDScript_srya6")
+[node name="code_panel" type="Panel" parent="CanvasLayer"]
+offset_left = 65.0
+offset_top = 395.0
+offset_right = 625.0
+offset_bottom = 655.0
+scale = Vector2(2.06712, 2.53591)
+theme_override_styles/panel = SubResource("StyleBoxFlat_textedit")
 
-[node name="TextEdit" type="TextEdit" parent="Control"]
-layout_mode = 0
-offset_right = 546.0
-offset_bottom = 336.0
-script = SubResource("GDScript_v6mw0")
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/code_panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Button" type="Button" parent="Control"]
-layout_mode = 0
-offset_left = 475.0
-offset_top = -59.0
-offset_right = 930.0
-offset_bottom = 508.0
-scale = Vector2(0.400951, 0.28845)
+[node name="code_editor" type="TextEdit" parent="CanvasLayer/code_panel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/background_color = Color(0.1, 0.1, 0.15, 0.5)
+theme_override_colors/font_color = Color(0.95, 0.95, 0.9, 1)
+theme_override_fonts/font = ExtResource("3_srya6")
+theme_override_font_sizes/font_size = 28
+text = "var a = 10;
+var b = 5;
+
+//substitua \"?\" pelo operador matemático esperado
+print a ? b; //15"
+
+[node name="Button" type="Button" parent="CanvasLayer"]
+offset_left = 1188.0
+offset_top = 348.0
+offset_right = 1643.0
+offset_bottom = 915.0
+scale = Vector2(0.4, 0.29)
 theme_override_styles/focus = SubResource("StyleBoxEmpty_c77ad")
 icon = ExtResource("3_dtkcs")
 flat = true
+
+[node name="player_life_bar" type="ProgressBar" parent="CanvasLayer"]
+offset_left = 88.0
+offset_top = 1116.0
+offset_right = 348.0
+offset_bottom = 1156.0
+scale = Vector2(4.24, 1)
+theme_override_styles/background = SubResource("StyleBoxFlat_player_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_player_fill")
+max_value = 5.0
+step = 1.0
+value = 5.0
+show_percentage = false
+
+[node name="GameOverScreen" parent="CanvasLayer" instance=ExtResource("5_gameover")]

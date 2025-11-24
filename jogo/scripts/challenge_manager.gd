@@ -110,6 +110,63 @@ func previous_challenge() -> Dictionary:
 		current_challenge_index = challenges.size() - 1
 	return get_current_challenge()
 
+func _format_friendly_error(error: String) -> String:
+	# Remove informações técnicas desnecessárias e torna a mensagem mais amigável
+	var friendly = error.strip_edges()
+	
+	# Extrai o número da linha se existir
+	var line_number = ""
+	if "[line " in friendly:
+		var line_start = friendly.find("[line ")
+		var line_end = friendly.find("]", line_start)
+		if line_end != -1:
+			line_number = friendly.substr(line_start + 6, line_end - line_start - 6)
+			friendly = friendly.replace("[line " + line_number + "]", "")
+	
+	# Remove prefixos técnicos
+	friendly = friendly.replace("Error:", "")
+	friendly = friendly.replace("Error", "")
+	friendly = friendly.strip_edges()
+	
+	# Traduz mensagens comuns de erro para algo mais amigável e CURTO
+	if "Unexpected character" in friendly:
+		var hint = ""
+		if line_number != "":
+			hint = " (linha " + line_number + ")"
+		friendly = "❌ Caractere inesperado" + hint + "!"
+	elif "Expect" in friendly and "property name" in friendly:
+		var hint = ""
+		if line_number != "":
+			hint = " (linha " + line_number + ")"
+		friendly = "❌ Erro de sintaxe" + hint + "!"
+	elif "Expect" in friendly and ";" in friendly:
+		var hint = ""
+		if line_number != "":
+			hint = " (linha " + line_number + ")"
+		friendly = "❌ Falta ponto e vírgula" + hint + "!"
+	elif "Expect" in friendly:
+		var hint = ""
+		if line_number != "":
+			hint = " (linha " + line_number + ")"
+		friendly = "❌ Erro de sintaxe" + hint + "!"
+	elif "Undefined variable" in friendly:
+		friendly = "❌ Variável não definida!"
+	elif "Unexpected token" in friendly:
+		friendly = "❌ Token inesperado!"
+	else:
+		# Se não conseguir traduzir, pelo menos simplifica
+		var hint = ""
+		if line_number != "":
+			hint = " (linha " + line_number + ")"
+		friendly = "❌ Erro no código" + hint + "!"
+	
+	# Limpa múltiplas quebras de linha e espaços extras
+	friendly = friendly.replace("\n\n", "\n")
+	friendly = friendly.replace("  ", " ")
+	friendly = friendly.strip_edges()
+	
+	return friendly
+
 func validate_solution(code: String, expected_output: String) -> Dictionary:
 	var compiler = LoxCompiler.new()
 	var result = compiler.execute_code(code)
@@ -119,9 +176,10 @@ func validate_solution(code: String, expected_output: String) -> Dictionary:
 	print("DEBUG - Compiler result: ", result)
 	
 	if not result.success:
+		var friendly_error = _format_friendly_error(result.error)
 		return {
 			"valid": false,
-			"message": "Erro de compilação: " + result.error
+			"message": friendly_error
 		}
 	
 	var output = result.output.strip_edges()

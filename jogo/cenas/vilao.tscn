@@ -1,6 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://c7785a57yw6si"]
+[gd_scene load_steps=12 format=3 uid="uid://c7785a57yw6si"]
 
 [ext_resource type="Texture2D" uid="uid://us4yg8r3slje" path="res://sprites/SPRITEt.png" id="1_0v7uh"]
+[ext_resource type="Script" uid="uid://by8rqvbmwvfcs" path="res://scripts/vilao_animated.gd" id="2_ic4uk"]
 [ext_resource type="Texture2D" uid="uid://bwt5vmtd0e37c" path="res://sprites/borda-life.png" id="3_ic4uk"]
 
 [sub_resource type="GDScript" id="GDScript_8jwm6"]
@@ -9,8 +10,8 @@ script/source = "extends CharacterBody2D
 @onready var vida_bar = $TextureProgressBar
 @onready var sprite = $vilao_animated
 
-var vida_max = 100
-var vida_atual = 100
+var vida_max = 200
+var vida_atual = 200
 
 func _ready():
 	vida_bar.max_value = vida_max
@@ -26,8 +27,9 @@ func levar_dano(valor):
 	print(\"Vilão levou\", valor, \"de dano. Vida atual =\", vida_atual)
 	piscar_dano()
 
-	if vida_atual <= 0:
-		morrer()
+	# Não morre automaticamente - só morre quando todos os desafios forem completados
+	# if vida_atual <= 0:
+	# 	morrer()
 
 func piscar_dano():
 	sprite.modulate = Color(1, 0.3, 0.3)
@@ -79,12 +81,14 @@ bg_color = Color(0.972549, 0, 0, 1)
 bg_color = Color(0, 0.768935, 0, 1)
 
 [node name="vilao" type="CharacterBody2D"]
+position = Vector2(0, 2)
 script = SubResource("GDScript_8jwm6")
 
 [node name="vilao_animated" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_10351")
 animation = &"parado"
 frame_progress = 0.562824
+script = ExtResource("2_ic4uk")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
@@ -98,7 +102,7 @@ offset_right = 169.0
 offset_bottom = 205.0
 theme_override_styles/background = SubResource("StyleBoxFlat_8jwm6")
 theme_override_styles/fill = SubResource("StyleBoxFlat_ic4uk")
-value = 50.0
+value = 100.0
 show_percentage = false
 
 [node name="Borda-life" type="Sprite2D" parent="TextureProgressBar"]

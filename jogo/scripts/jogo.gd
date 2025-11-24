@@ -1,29 +1,53 @@
 extends Node2D
 
-@onready var input_code = $Control/TextEdit
-@onready var run_button = $Control/Button
-@onready var mensagem = $mensagem   # usa a Label que está em /jogo/mensagem
-@onready var vilao = $vilao
+@onready var code_editor = $CanvasLayer/code_panel/ScrollContainer/code_editor
+@onready var code_panel = $CanvasLayer/code_panel
+@onready var run_button = $CanvasLayer/Button
+@onready var mensagem = $CanvasLayer/mensagem
+@onready var vilao = $CanvasLayer/vilao
+@onready var background = $CanvasLayer/background
+@onready var player_life_bar = $CanvasLayer/player_life_bar
+@onready var game_over_screen = $CanvasLayer/GameOverScreen
 
 var challenge_manager: ChallengeManager
 var current_challenge: Dictionary = {}
+var challenges_completed: int = 0
+var total_challenges: int = 0
+var player_lives_max: int = 5
+var player_lives: int = player_lives_max
+var game_over := false
 
 func _ready():
 	# Carrega o sistema de desafios
 	challenge_manager = ChallengeManager.new()
 	
+	# Conta o total de desafios
+	total_challenges = challenge_manager.challenges.size()
+	challenges_completed = 0
+	player_lives = player_lives_max
+	game_over = false
+	_update_player_life_bar()
+	run_button.disabled = false
+	run_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	if code_editor:
+		code_editor.editable = true
+	
 	# Carrega o primeiro desafio
 	current_challenge = challenge_manager.get_current_challenge()
 	_load_challenge()
 	
-	mensagem.text = "🧠 Complete o código para atacar a IA!"
+	mensagem.text = "🧠 Complete o código para atacar o Otto!"
 	run_button.pressed.connect(_on_run_button_pressed)
-	input_code.gui_input.connect(_on_input_code_gui_input)
 	
 	# Conecta o livro para atualizar quando fechar
-	var livro = $BookBotton
+	var livro = $CanvasLayer/BookBotton
 	if livro and livro.has_method("set_challenge_callback"):
 		livro.set_challenge_callback(_load_challenge)
+
+	# Conecta a tela de game over
+	if game_over_screen:
+		game_over_screen.restart_requested.connect(_on_restart_requested)
+		game_over_screen.quit_requested.connect(_on_quit_requested)
 
 func _load_challenge():
 	if current_challenge.is_empty():
@@ -31,15 +55,14 @@ func _load_challenge():
 		return
 	
 	current_challenge = challenge_manager.get_current_challenge()
-	input_code.text = current_challenge.get("code", "")
-	mensagem.text = "💻 Desafio: " + current_challenge.get("name", "Desconhecido") + "\nComplete o código substituindo '?'"
-
-# --- Detecta Ctrl + Enter dentro do TextEdit ---
-func _on_input_code_gui_input(event):
-	if event is InputEventKey and event.pressed:
-		if event.keycode == KEY_ENTER and event.ctrl_pressed:
-			executar_comando()
-			get_viewport().set_input_as_handled()
+	var code = current_challenge.get("code", "")
+	
+	# Define o código no editor
+	if code_editor:
+		code_editor.text = code
+		code_editor.editable = true
+	
+	mensagem.text = "💻 Desafio: " + current_challenge.get("name", "Desconhecido")
 
 # --- Botão "Executar" ---
 func _on_run_button_pressed():
@@ -47,16 +70,19 @@ func _on_run_button_pressed():
 
 # --- Execução do comando digitado ---
 func executar_comando():
-	var code = input_code.text.strip_edges()
-	
-	if code.is_empty():
-		mensagem.text = "⚠️ Digite algum código!"
-		feedback_cor(false)
+	if game_over:
+		mensagem.text = "💀 Você já perdeu todas as vidas! Reinicie o jogo."
+		return
+
+	if not code_editor:
+		mensagem.text = "⚠️ Editor de código não encontrado!"
 		return
 	
-	# Verifica se ainda tem "?" no código (ignorando comentários e strings)
-	if _has_unresolved_question_marks(code):
-		mensagem.text = "❌ Complete o código substituindo todos os '?'"
+	# Obtém o código do editor
+	var code = code_editor.text
+	
+	if code.strip_edges().is_empty():
+		mensagem.text = "⚠️ O código está vazio!"
 		feedback_cor(false)
 		return
 	
@@ -65,79 +91,86 @@ func executar_comando():
 	var validation = challenge_manager.validate_solution(code, expected_output)
 	
 	if validation.valid:
-		mensagem.text = "✅ " + validation.message + "\n💥 A IA recebeu dano!"
+		challenges_completed += 1
+		mensagem.text = "✅ " + validation.message + "\n💥 O Otto recebeu dano!"
 		feedback_cor(true)
 		atacar_vilao(20)
 		
-		# Avança para o próximo desafio após um delay
-		await get_tree().create_timer(1.5).timeout
-		current_challenge = challenge_manager.next_challenge()
-		_load_challenge()
+		# Verifica se todos os desafios foram completados
+		if challenges_completed >= total_challenges:
+			# Todos os desafios completados - boss morre
+			await get_tree().create_timer(1.5).timeout
+			if vilao and vilao.has_method("morrer"):
+				vilao.morrer()
+			# Mostra tela de vitória
+			await get_tree().create_timer(0.5).timeout
+			_show_victory_screen()
+		else:
+			# Avança para o próximo desafio após um delay
+			await get_tree().create_timer(1.5).timeout
+			current_challenge = challenge_manager.next_challenge()
+			_load_challenge()
 	else:
 		mensagem.text = "❌ " + validation.message
 		feedback_cor(false)
+		_penalizar_jogador()
 
 # --- Envia dano ao vilão ---
 func atacar_vilao(dano):
 	if vilao and vilao.has_method("levar_dano"):
 		print("Chamando vilao.levar_dano com", dano)
-		vilao.levar_dano(dano)
+		# Só causa dano se ainda não completou todos os desafios
+		if challenges_completed < total_challenges:
+			vilao.levar_dano(dano)
 	else:
 		mensagem.text = "⚠️ Vilão não encontrado ou já derrotado!"
 		print("ERRO: vilao não encontrado ou sem método.")
 
-# --- Verifica se há "?" não resolvidos no código (ignora comentários e strings) ---
-func _has_unresolved_question_marks(code: String) -> bool:
-	var lines = code.split("\n")
-	
-	for line in lines:
-		# Remove comentários da linha
-		var comment_pos = line.find("//")
-		var code_part = line
-		if comment_pos >= 0:
-			code_part = line.substr(0, comment_pos)
-		
-		# Verifica strings e ignora "?" dentro delas
-		var in_string = false
-		var string_char = ""
-		var i = 0
-		
-		while i < code_part.length():
-			var char = code_part[i]
-			
-			# Detecta início/fim de strings
-			if (char == '"' or char == "'") and (i == 0 or code_part[i-1] != "\\"):
-				if not in_string:
-					in_string = true
-					string_char = char
-				elif char == string_char:
-					in_string = false
-					string_char = ""
-			
-			# Verifica se há "?" que não está em string
-			if not in_string and char == "?":
-				# Verifica se não é parte de uma palavra (como "substitua")
-				var before = "" if i == 0 else code_part[i-1]
-				var after = "" if i >= code_part.length() - 1 else code_part[i+1]
-				
-				# Verifica se é um caractere alfanumérico ou underscore
-				var before_is_alpha = before.length() > 0 and (before.is_valid_float() or before == "_" or before.to_lower() >= "a" and before.to_lower() <= "z")
-				var after_is_alpha = after.length() > 0 and (after.is_valid_float() or after == "_" or after.to_lower() >= "a" and after.to_lower() <= "z")
-				
-				# Se está entre caracteres alfanuméricos, é parte de uma palavra (ignora)
-				if not (before_is_alpha or after_is_alpha):
-					# É um "?" solto que precisa ser substituído
-					return true
-			
-			i += 1
-	
-	return false
-
-# --- Feedback visual no campo de texto ---
+# --- Feedback visual no editor ---
 func feedback_cor(certo: bool):
 	var cor_inicial = Color(1, 1, 1)
 	var cor_final = Color(0.2, 1, 0.2) if certo else Color(1, 0.2, 0.2)
 
-	input_code.modulate = cor_final
-	await get_tree().create_timer(0.3).timeout
-	input_code.modulate = cor_inicial
+	# Aplica feedback visual no editor
+	if code_editor:
+		code_editor.modulate = cor_final
+		await get_tree().create_timer(0.3).timeout
+		code_editor.modulate = cor_inicial
+
+func _penalizar_jogador():
+	if game_over:
+		return
+	player_lives -= 1
+	if player_lives < 0:
+		player_lives = 0
+	_update_player_life_bar()
+	if player_lives == 0:
+		game_over = true
+		if code_editor:
+			code_editor.editable = false
+		run_button.disabled = true
+		run_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		# Mostra tela de game over
+		await get_tree().create_timer(0.5).timeout
+		_show_defeat_screen()
+
+func _update_player_life_bar():
+	if player_life_bar:
+		player_life_bar.max_value = player_lives_max
+		player_life_bar.value = player_lives
+
+func _show_victory_screen():
+	if game_over_screen:
+		game_over_screen.show_victory()
+
+func _show_defeat_screen():
+	if game_over_screen:
+		game_over_screen.show_defeat()
+
+func _on_restart_requested():
+	# Reinicia o jogo recarregando a cena
+	get_tree().reload_current_scene()
+
+func _on_quit_requested():
+	# Volta para o menu principal
+	get_tree().change_scene_to_file("res://cenas/Menu.tscn")

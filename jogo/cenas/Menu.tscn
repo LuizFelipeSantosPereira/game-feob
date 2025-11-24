@@ -1,17 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://ca0rhpm04epy2"]
+[gd_scene load_steps=10 format=3 uid="uid://8j57ck26goms"]
 
-[ext_resource type="Script" uid="uid://cvqxr0864jepr" path="res://scripts/Menu.gd" id="1_yjf0y"]
-[ext_resource type="Texture2D" uid="uid://1sy1ql4qujao" path="res://sprites/Cidade Normal.png" id="2_85cn7"]
-[ext_resource type="Shader" uid="uid://dfxssj2syggkv" path="res://cenas/transMenu.gdshader" id="2_w5wjc"]
+[ext_resource type="Script" uid="uid://cvqxr0864jepr" path="res://scripts/Menu.gd" id="1_menu"]
+[ext_resource type="FontFile" uid="uid://w0gklafmhnwd" path="res://Fontes/VT323-Regular.ttf" id="3_font"]
+[ext_resource type="Shader" uid="uid://dfxssj2syggkv" path="res://cenas/transMenu.gdshader" id="4_shader"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qoxbi"]
-shader = ExtResource("2_w5wjc")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_trans"]
+shader = ExtResource("4_shader")
 shader_parameter/use_sprite_alpha = true
 shader_parameter/use_transition_texture = false
-shader_parameter/transition_type = 2
-shader_parameter/position = Vector2(0.5, 0.5)
+shader_parameter/transition_type = 0
+shader_parameter/position = Vector2(0, 0)
 shader_parameter/invert = false
-shader_parameter/grid_size = Vector2(0.5, 50)
+shader_parameter/grid_size = Vector2(1, 1)
 shader_parameter/rotation_angle = 0.0
 shader_parameter/stagger = Vector2(0, 0)
 shader_parameter/stagger_frequency = Vector2i(2, 2)
@@ -19,30 +19,14 @@ shader_parameter/flip_frequency = Vector2i(1, 1)
 shader_parameter/basic_feather = 0.0
 shader_parameter/use_mask_size = false
 shader_parameter/mask_size = Vector2(100, 100)
-shader_parameter/edges = 3
-shader_parameter/shape_feather = 0.0
+shader_parameter/edges = 6
+shader_parameter/shape_feather = 0.1
 shader_parameter/sectors = 1
 shader_parameter/clock_feather = 0.0
 shader_parameter/progress = 3.0
 shader_parameter/progress_bias = Vector2(0, 0)
 
-[sub_resource type="Animation" id="Animation_qoxbi"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:material:shader_parameter/progress")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [3.0]
-}
-
-[sub_resource type="Animation" id="Animation_w5wjc"]
-resource_name = "transição"
+[sub_resource type="Animation" id="Animation_trans"]
 length = 2.0
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -57,83 +41,139 @@ tracks/0/keys = {
 "values": [3.0, 0.0]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_alp18"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_trans"]
 _data = {
-&"RESET": SubResource("Animation_qoxbi"),
-&"transição": SubResource("Animation_w5wjc")
+&"transição": SubResource("Animation_trans")
 }
 
-[node name="MainMenu" type="Node2D"]
-position = Vector2(-2, 5)
-script = ExtResource("1_yjf0y")
+[sub_resource type="StyleBoxFlat" id="StyleBox_title"]
+bg_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_button_hover"]
+bg_color = Color(0.3, 0.3, 0.4, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 0.5, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_button"]
+bg_color = Color(0.2, 0.2, 0.3, 0.9)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.9, 0.3, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="Menu" type="Node2D"]
+script = ExtResource("1_menu")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
+[node name="VideoPlayer" type="VideoStreamPlayer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 2000.0
+offset_bottom = 1280.0
+grow_horizontal = 2
+grow_vertical = 2
+paused = true
+
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
 z_index = 1
-material = SubResource("ShaderMaterial_qoxbi")
-offset_left = 1157.0
-offset_top = 651.0
-offset_right = 2330.0
-offset_bottom = 1309.0
-rotation = -3.14159
+material = SubResource("ShaderMaterial_trans")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/ColorRect"]
 libraries = {
-&"": SubResource("AnimationLibrary_alp18")
+&"": SubResource("AnimationLibrary_trans")
 }
 
+[node name="Title" type="Label" parent="CanvasLayer"]
+z_index = 5
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -400.0
+offset_right = 400.0
+offset_bottom = -280.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 120
+theme_override_styles/normal = SubResource("StyleBox_title")
+text = "ATAQUE LOX"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+z_index = 5
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -136.0
-offset_top = -335.0
-offset_right = 136.0
-offset_bottom = -161.0
+offset_left = -275.0
+offset_top = -380.0
+offset_right = 275.0
+offset_bottom = -100.0
 grow_horizontal = 2
 grow_vertical = 0
-size_flags_horizontal = 8
-size_flags_vertical = 4
+theme_override_constants/separation = 20
+alignment = 1
 
-[node name="StartGame" type="Label" parent="CanvasLayer/VBoxContainer"]
+[node name="StartGameButton" type="Button" parent="CanvasLayer/VBoxContainer"]
+custom_minimum_size = Vector2(550, 80)
 layout_mode = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 50
-text = "Start Game"
+theme_override_colors/font_hover_color = Color(1, 1, 0.5, 1)
+theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 60
+theme_override_styles/hover = SubResource("StyleBox_button_hover")
+theme_override_styles/pressed = SubResource("StyleBox_button_hover")
+theme_override_styles/normal = SubResource("StyleBox_button")
+text = "START GAME"
 
-[node name="Button" type="Button" parent="CanvasLayer/VBoxContainer"]
+[node name="QuitGameButton" type="Button" parent="CanvasLayer/VBoxContainer"]
+custom_minimum_size = Vector2(550, 80)
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "Start Game"
-flat = true
+theme_override_colors/font_hover_color = Color(1, 1, 0.5, 1)
+theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 60
+theme_override_styles/hover = SubResource("StyleBox_button_hover")
+theme_override_styles/pressed = SubResource("StyleBox_button_hover")
+theme_override_styles/normal = SubResource("StyleBox_button")
+text = "QUIT GAME"
 
-[node name="Options" type="Label" parent="CanvasLayer/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 40
-text = "Options"
-horizontal_alignment = 1
-
-[node name="QuitGame" type="Label" parent="CanvasLayer/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 30
-text = "Quit Game"
-horizontal_alignment = 1
-
-[node name="LeftArrow" type="Sprite2D" parent="."]
-
-[node name="RightArrow" type="Sprite2D" parent="."]
-
-[node name="CidadeNormal" type="Sprite2D" parent="."]
-position = Vector2(577, 319)
-rotation = 0.000313933
-scale = Vector2(0.747396, 0.625)
-texture = ExtResource("2_85cn7")
-
-[connection signal="animation_finished" from="CanvasLayer/ColorRect/AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
-[connection signal="pressed" from="CanvasLayer/VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="finished" from="CanvasLayer/VideoPlayer" to="." method="_on_video_finished"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/StartGameButton" to="." method="_on_start_game_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/QuitGameButton" to="." method="_on_quit_game_pressed"]
